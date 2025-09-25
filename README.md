@@ -9,7 +9,7 @@ The site features a clean, dark-themed UI with a **Unified Search** functionalit
 ### 🌐 Live Demo
 
 You can view the live version of the website here:
-[Link] (https://sudocodemonk.github.io/portfolio/)
+[Link](https://sudocodemonk.github.io/portfolio/)
 
 ---
 
