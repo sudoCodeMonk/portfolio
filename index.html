@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sourabh Bhardwaj - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-color: #0d121c;
+            --text-color: #e2e8f0;
+            --card-bg: #1a202c;
+            --primary-color: #00d47e;
+            --secondary-color: #7b9efb;
+            --border-color: #3f4756;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: transparent;
+            color: var(--text-color);
+            transition: background-color 0.5s ease, color 0.5s ease;
+            position: relative;
+        }
+        
+        /* New Background and Glow Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 10% 80%, rgba(255, 255, 255, 0.05), transparent 60%),
+            radial-gradient(circle at 90% 20%, rgba(0, 212, 126, 0.08), transparent 60%),
+            linear-gradient(to bottom, #0d121c 0%, #1a202c 100%);
+            background-size: cover;
+            background-repeat: no-repeat;
+            z-index: -2;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .section {
+            padding: 6rem 0;
+            scroll-margin-top: 8rem; /* Offset for fixed navigation */
+        }
+        
+        .section-heading {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--primary-color);
+        }
+        
+        /* Highlighted text style */
+        .highlight {
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+        
+        /* Hero section specific styles */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+        .hero-title {
+            animation: fadeInTop 1.5s ease-out;
+        }
+        
+        .hero-subtitle {
+            animation: fadeInBottom 1.5s ease-out 0.5s;
+            animation-fill-mode: both;
+        }
+        
+        @keyframes fadeInTop {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInBottom {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+        
+        /* Floating Navigation */
+        .floating-nav {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            background-color: rgba(26, 32, 44, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 9999px;
+            padding: 0.5rem 1rem;
+            display: flex;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: top 0.3s ease-in-out;
+        }
+        .floating-nav.hidden {
+            top: -100px;
+        }
+        
+        .floating-nav a {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .floating-nav a:hover,
+        .floating-nav a.active {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+        
+        /* Search & Grid Containers */
+        .search-container {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .grid-container {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        
+        .item-card {
+            background-color: #2b3240;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border: 1px solid #3f4756;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        .item-card.hidden {
+            display: none;
+        }
+        
+        /* Timeline styles */
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            border-left: 2px solid var(--border-color);
+            margin-bottom: 2.5rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 14px;
+            height: 14px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            border: 3px solid var(--bg-color);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Floating Navigation -->
+    <nav id="floating-nav" class="floating-nav hidden md:flex">
+        <a href="#unified-search">Search</a>
+        <a href="#summary">Summary</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    
+    <!-- Hero Section -->
+    <header id="hero" class="relative">
+        <h1 class="text-6xl md:text-8xl font-extrabold mb-4 hero-title">Sourabh Bhardwaj</h1>
+        <p class="text-xl md:text-3xl text-gray-400 font-light max-w-2xl leading-snug hero-subtitle">
+            A seasoned <span class="highlight">Tech Lead</span> specializing in building and shipping <span class="highlight">AI agents</span>, <span class="highlight">data platforms</span>, and <span class="highlight">cloud-native solutions</span> that drive business growth.
+        </p>
+        <div class="mt-8">
+            <a href="https://calendly.com/sourabhbhardwaj727/ad-hoc-meeting" target="_blank" class="bg-primary-color text-bg-color px-6 py-3 rounded-full font-bold shadow-lg transition-all hover:bg-opacity-90 hover:scale-105 hover:ring-2 hover:ring-primary-color hover:ring-offset-2 hover:ring-offset-bg-color">Book a Meeting</a>
+        </div>
+        <a href="#unified-search" class="scroll-down text-gray-400 hover:text-primary-color transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v11.586l3.293-3.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 15.586V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+        </a>
+    </header>
+    
+    <main>
+        <!-- Unified Search Section -->
+        <section id="unified-search" class="section">
+            <div class="container">
+                <h2 class="section-heading">Unified Search</h2>
+                <div id="unified-search-container" class="search-container">
+                    <div class="flex flex-col md:flex-row items-center gap-4">
+                        <input type="text" id="unified-search-input" placeholder="Search across all skills and projects..." class="flex-grow p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-color placeholder-gray-400">
+                        <p class="text-sm text-gray-400 text-center md:text-left">
+                            Find anything I've worked on in one simple search.
+                        </p>
+                    </div>
+                    <div id="unified-results-container" class="grid-container">
+                        <!-- Search results will be dynamically generated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Professional Summary Section -->
+        <section id="summary" class="section">
+            <div class="container">
+                <h2 class="section-heading">Professional Summary</h2>
+                <p class="text-lg md:text-xl leading-relaxed text-gray-300 text-center max-w-4xl mx-auto">
+                    I have over 8 years of hands-on experience as a technical leader, taking products from initial concept to full-scale production. My focus is on translating complex business challenges into elegant, efficient, and scalable software architectures. From spearheading projects at <span class="highlight">The Linux Foundation</span> to architecting robust data pipelines and real-time systems, I thrive on delivering tangible value and leading teams towards a shared technical vision.
+                </p>
+            </div>
+        </section>
+        
+        <!-- Technical Skills Section with Search -->
+        <section id="skills" class="section">
+            <div class="container">
+                <h2 class="section-heading">Technical Skills</h2>
+                <div id="skill-search-container" class="search-container">
+                    <div class="flex flex-col md:flex-row items-center gap-4">
+                        <input type="text" id="skill-search-input" placeholder="Search for a skill (e.g., 'AWS', 'LangChain', 'Node.js')..." class="flex-grow p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-color placeholder-gray-400">
+                        <p class="text-sm text-gray-400 text-center md:text-left">
+                            Search my skills to see how I can help you build your product.
+                        </p>
+                    </div>
+                    <div id="skills-display-container" class="grid-container">
+                        <!-- Skills will be dynamically generated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Professional Experience Section -->
+        <section id="experience" class="section">
+            <div class="container">
+                <h2 class="section-heading">Professional Experience</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold text-white">The Linux Foundation</h3>
+                        <p class="text-sm text-gray-400 italic mb-3">Tech Lead & Senior Software Engineer | 2020 - Present</p>
+                        <ul class="list-disc list-inside text-gray-300 text-sm space-y-2">
+                            <li><span class="highlight">Product Leadership:</span> Led a team in architecting and deploying a multi-agent AI system on AWS, serving as the technical cornerstone for a new product line.</li>
+                            <li><span class="highlight">Performance Optimization:</span> Designed and implemented a RAG-based search engine that delivered a 30% reduction in query latency and improved search accuracy.</li>
+                            <li><span class="highlight">Cost-Effective Innovation:</span> Integrated open-source models (Llama-2) into the product, reducing reliance on expensive third-party APIs and achieving a 20% cost reduction without compromising performance.</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold text-white">Mobisoft Infotech</h3>
+                        <p class="text-sm text-gray-400 italic mb-3">Senior Software Engineer | 2019 - 2023</p>
+                        <ul class="list-disc list-inside text-gray-300 text-sm space-y-2">
+                            <li><span class="highlight">Data Product Development:</span> Independently designed and implemented scalable AWS-based pipelines to ingest and process data from the Zoom platform for analytics and operational reporting, enabling data-driven business decisions.</li>
+                            <li><span class="highlight">Backend Systems:</span> Acted as a key contributor and technical lead on backend platform services, ensuring reliability and scalability of critical product features.</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold text-white">InnoLogic Lab</h3>
+                        <p class="text-sm text-gray-400 italic mb-3">Software Engineer | 2017 - 2018</p>
+                        <ul class="list-disc list-inside text-gray-300 text-sm space-y-2">
+                            <li><span class="highlight">VR Product Design:</span> Built an immersive VR training solution for the Merchant Navy, creating a full 360-degree digital replica of a ship and a highly realistic, interactive training environment.</li>
+                            <li><span class="highlight">User-Centric Features:</span> Led the development of key user-facing features, enhancing product usability and driving user engagement metrics.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Projects Section with Search -->
+        <section id="projects" class="section">
+            <div class="container">
+                <h2 class="section-heading">Projects</h2>
+                <div id="project-search-container" class="search-container">
+                    <div class="flex flex-col md:flex-row items-center gap-4">
+                        <input type="text" id="project-search-input" placeholder="Search for a project (e.g., 'Internal Analytics Copilot', 'microservices', 'ETL')..." class="flex-grow p-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-color placeholder-gray-400">
+                        <p class="text-sm text-gray-400 text-center md:text-left">
+                            Search my projects to find relevant examples of my work.
+                        </p>
+                    </div>
+                    <div id="projects-display-container" class="grid-container">
+                        <!-- Projects will be dynamically generated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="container text-center">
+                <h2 class="section-heading">Get In Touch</h2>
+                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+                    I am actively seeking new opportunities to build innovative products and lead exceptional engineering teams. Feel free to connect with me.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center gap-4 text-sm font-medium">
+                    <a href="mailto:sourabhbhardwaj@example.com" class="bg-primary-color text-bg-color px-6 py-3 rounded-full hover:bg-opacity-90 transition-colors">Email</a>
+                    <a href="https://linkedin.com/in/sourabhbhardwaj" target="_blank" class="bg-gray-700 text-white px-6 py-3 rounded-full hover:bg-gray-600 transition-colors">LinkedIn</a>
+                    <a href="https://github.com/sourabhbhardwaj" target="_blank" class="bg-gray-700 text-white px-6 py-3 rounded-full hover:bg-gray-600 transition-colors">GitHub</a>
+                    <a href="https://calendly.com/sourabhbhardwaj727/ad-hoc-meeting" target="_blank" class="bg-primary-color text-bg-color px-6 py-3 rounded-full font-bold shadow-lg transition-all hover:bg-opacity-90 hover:scale-105 hover:ring-2 hover:ring-primary-color hover:ring-offset-2 hover:ring-offset-bg-color">Book a Meeting</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="py-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2024 Sourabh Bhardwaj. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Data for skills and projects from the Markdown file
+        const skillsData = [
+            {
+                category: 'AI Agents & RAG',
+                skills: ['LangChain', 'LangGraph', 'LlamaIndex', 'Multi-Agent Systems', 'Model Context Protocol (MCP)', 'Retrieval-Augmented Generation (RAG)', 'Semantic Layer', 'LLM Fine-Tuning']
+            },
+            {
+                category: 'Data Engineering',
+                skills: ['Snowflake', 'dbt', 'Apache Airflow', 'Pyspark', 'ETL/ELT', 'Data Warehousing', 'Big Data Pipelines', 'Batch Processing', 'Streaming Data']
+            },
+            {
+                category: 'Cloud Platform',
+                skills: ['AWS', 'AWS Lambda', 'AWS EC2', 'AWS S3', 'AWS Glue', 'AWS CloudFormation', 'AWS SQS', 'AWS SNS', 'AWS ECS', 'Serverless Architectures', 'AWS IAM', 'API Gateway', 'Cost Optimization']
+            },
+            {
+                category: 'Databases',
+                skills: ['PostgreSQL', 'pgvector', 'Pinecone', 'NoSQL (DynamoDB, MongoDB)', 'SQLite']
+            },
+            {
+                category: 'Architecture',
+                skills: ['Solution & System Architecture', 'Microservices', 'API Ecosystems', 'Swagger API Design', 'Modular Design', 'Event-Driven Architecture', 'Scalability', 'Security']
+            },
+            {
+                category: 'Core Development',
+                skills: ['Golang', 'Python', 'Node.js', 'TypeScript', 'C#', 'Unity', 'VR/AR', 'Git', 'JavaScript', 'HTML', 'CSS', 'RESTful APIs']
+            }
+        ];
+        
+        const projectsData = [
+            {
+                title: 'Internal Analytics Copilot',
+                description: 'An AI-powered data assistant for your company\'s internal knowledge base, giving employees instant, natural-language access to complex data. By using a dbt semantic layer and a retrieval-augmented generation (RAG) approach, the information is always accurate and up-to-date, boosting productivity and business intelligence accessibility.',
+                techStack: ['LangChain', 'LangGraph', 'AWS CDK', 'DBT', 'Snowflake', 'Confluence', 'AI', 'RAG']
+            },
+            {
+                title: 'AI-Powered HR Q&A Bot',
+                description: 'A secure and efficient conversational AI bot to handle common employee questions about HR policies, benefits, and handbooks. This reduces the workload on the HR team, improves employee satisfaction by providing instant answers, and ensures consistent communication across the organization.',
+                techStack: ['pgvector', 'LangChain', 'RAG', 'Knowledge Bases', 'AI']
+            },
+            {
+                title: 'Platform Microservices',
+                description: 'Led the development of a comprehensive microservices-based platform, creating multiple services including user, organization, project, membership, coupon, event, and collaboration services. These services powered all internal tools and the public-facing company website and platform.',
+                techStack: ['Golang', 'AWS Lambda', 'AWS S3', 'AWS SQS', 'AWS SNS', 'API Gateway', 'Slack Notification', 'Serverless Architecture', 'Swagger', 'Microservice']
+            },
+            {
+                title: 'EDX Data Integration',
+                description: 'Developed a robust data integration pipeline to handle large data dumps from an EDX S3 bucket. The process involved Extract, Decrypt, Transform, and Load (ETL) operations, using GPG for decryption. The transformed data was loaded into a Snowflake data warehouse, ensuring data integrity and availability for downstream analytics.',
+                techStack: ['Python', 'AWS S3', 'AWS Lambda', 'ETL', 'Snowflake', 'GPG']
+            },
+            {
+                title: 'Interactive VR Training Simulator',
+                description: 'Designed and built an immersive virtual reality training simulator for Merchant Navy recruits, replicating the interior and exterior of a ship in a detailed 360-degree environment. The simulator allowed trainees to practice emergency protocols and navigation in a safe, controlled virtual space, significantly reducing training costs and increasing safety preparedness.',
+                techStack: ['Unity', 'C#', 'VR/AR', 'Game Development']
+            },
+            {
+                title: 'Real-Time Multiplayer Ludo Game Backend',
+                description: 'Designed and built a robust Node.js backend to support a real-time multiplayer Ludo game, ensuring high-throughput and low-latency interactions. This provided a seamless, responsive experience for users, which is critical for engaging real-time gaming applications.',
+                techStack: ['Node.js', 'Express.js', 'WebSockets', 'Unity', 'Game Development']
+            },
+            {
+                title: 'Robotic Process Automation for Genpact',
+                description: 'Delivered a comprehensive robotic process automation (RPA) solution for a major BPO client, Genpact. This initiative effectively streamlined repetitive business operations, minimized human error, and enabled workforce optimization, leading to significant cost savings and improved efficiency.',
+                techStack: ['RPA', 'Automation Anywhere']
+            },
+            {
+                title: 'Fashion Event Management Platform',
+                description: 'Architected and developed a dynamic platform that provided real-time, minute-by-minute information on fashion events. This solution facilitated enhanced event management and improved media coverage by ensuring all stakeholders had immediate access to critical, up-to-date information.',
+                techStack: ['Java', 'Spring Boot', 'AWS', 'Web Development']
+            }
+        ];
+        
+        // --- Rendering Functions ---
+        
+        function renderSkills() {
+            const container = document.getElementById('skills-display-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            skillsData.forEach(skillCategory => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'item-card';
+                categoryCard.innerHTML = `
+                <h3 class="text-xl font-bold text-white mb-2">${skillCategory.category}</h3>
+                <div class="flex flex-wrap gap-2">
+                ${skillCategory.skills.map(skill => `<span class="bg-gray-600 text-gray-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">${skill}</span>`).join('')}
+                </div>
+                `;
+                container.appendChild(categoryCard);
+            });
+        }
+        
+        function renderProjects() {
+            const container = document.getElementById('projects-display-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            projectsData.forEach(project => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'item-card';
+                projectCard.innerHTML = `
+                <h3 class="text-xl font-bold text-white mb-2">${project.title}</h3>
+                <p class="text-gray-400 text-sm mb-3">${project.description}</p>
+                <div class="flex flex-wrap gap-2 mt-auto">
+                ${project.techStack.map(tech => `<span class="bg-primary-color text-bg-color text-xs font-semibold px-2.5 py-0.5 rounded-full">${tech}</span>`).join('')}
+                </div>
+                `;
+                container.appendChild(projectCard);
+            });
+        }
+        
+        function renderUnifiedResults(query) {
+            const container = document.getElementById('unified-results-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const normalizedQuery = query.toLowerCase();
+            
+            const filteredSkills = skillsData.filter(category => 
+                category.category.toLowerCase().includes(normalizedQuery) ||
+                category.skills.some(skill => skill.toLowerCase().includes(normalizedQuery))
+            );
+            
+            const filteredProjects = projectsData.filter(project => 
+                project.title.toLowerCase().includes(normalizedQuery) ||
+                project.description.toLowerCase().includes(normalizedQuery) ||
+                project.techStack.some(tech => tech.toLowerCase().includes(normalizedQuery))
+            );
+            
+            if (filteredSkills.length === 0 && filteredProjects.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-400">No results found.</p>';
+                return;
+            }
+            
+            // Render skills as tags
+            if (filteredSkills.length > 0) {
+                const skillsSection = document.createElement('div');
+                skillsSection.className = 'w-full mb-8';
+                skillsSection.innerHTML = `<h3 class="text-lg font-bold text-white mb-4">Matching Skills</h3>`;
+                
+                filteredSkills.forEach(skillCategory => {
+                    const skillCard = document.createElement('div');
+                    skillCard.className = 'mb-4';
+                    skillCard.innerHTML = `
+                        <p class="font-bold text-md text-gray-300 mb-2">${skillCategory.category}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${skillCategory.skills.filter(skill => skill.toLowerCase().includes(normalizedQuery)).map(skill => `<span class="bg-gray-600 text-gray-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">${skill}</span>`).join('')}
+                        </div>
+                    `;
+                    skillsSection.appendChild(skillCard);
+                });
+                container.appendChild(skillsSection);
+            }
+            
+            // Render projects as cards
+            if (filteredProjects.length > 0) {
+                const projectsSection = document.createElement('div');
+                projectsSection.className = 'w-full';
+                projectsSection.innerHTML = `<h3 class="text-lg font-bold text-white mb-4">Matching Projects</h3>`;
+                
+                const projectsGrid = document.createElement('div');
+                projectsGrid.className = 'grid-container';
+                
+                filteredProjects.forEach(project => {
+                    const projectCard = document.createElement('div');
+                    projectCard.className = 'item-card';
+                    projectCard.innerHTML = `
+                        <h3 class="text-xl font-bold text-white mb-2">${project.title}</h3>
+                        <p class="text-gray-400 text-sm mb-3">${project.description}</p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            ${project.techStack.map(tech => `<span class="bg-primary-color text-bg-color text-xs font-semibold px-2.5 py-0.5 rounded-full">${tech}</span>`).join('')}
+                        </div>
+                    `;
+                    projectsGrid.appendChild(projectCard);
+                });
+                projectsSection.appendChild(projectsGrid);
+                container.appendChild(projectsSection);
+            }
+        }
+        
+        // --- Event Listeners and Initializers ---
+        
+        const skillSearchInput = document.getElementById('skill-search-input');
+        if (skillSearchInput) {
+            skillSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim().toLowerCase();
+                const cards = document.querySelectorAll('#skills-display-container .item-card');
+                cards.forEach(card => {
+                    const text = card.textContent || card.innerText;
+                    if (text.toLowerCase().includes(query)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        }
+        
+        const projectSearchInput = document.getElementById('project-search-input');
+        if (projectSearchInput) {
+            projectSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim().toLowerCase();
+                const cards = document.querySelectorAll('#projects-display-container .item-card');
+                cards.forEach(card => {
+                    const text = card.textContent || card.innerText;
+                    if (text.toLowerCase().includes(query)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        }
+        
+        const unifiedSearchInput = document.getElementById('unified-search-input');
+        if (unifiedSearchInput) {
+            unifiedSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                if (query.length > 1) {
+                    renderUnifiedResults(query);
+                } else {
+                    unifiedResultsContainer.innerHTML = '';
+                }
+            });
+        }
+        
+        // Initial render on page load and navigation logic
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSkills();
+            renderProjects();
+            
+            // Smooth scroll for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Highlight active navigation link on scroll
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.floating-nav a');
+            const floatingNav = document.getElementById('floating-nav');
+            
+            const onScroll = () => {
+                // Show/hide navigation based on scroll direction
+                if (window.scrollY > 200) {
+                    floatingNav.classList.remove('hidden');
+                } else {
+                    floatingNav.classList.add('hidden');
+                }
+                
+                // Highlight active link
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(a => {
+                    a.classList.remove('active');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active');
+                    }
+                });
+            };
+            window.addEventListener('scroll', onScroll);
+        });
+    </script>
+</body>
+</html>
